@@ -1,0 +1,54 @@
+﻿@page
+@model _02Vydry.Pages.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Vydra Details</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Name
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Vydra.Name
+        </dd>
+        <dt class="col-sm-2">
+            Color
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Vydra.Color
+        </dd>
+        <dt class="col-sm-2">
+            Mother
+        </dt>
+        <dd class="col-sm-10">
+            @(Model.Vydra.Mother?.Name ?? "neznámá")
+        </dd>
+        <dt class="col-sm-2">
+            Place
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Vydra.Place.Name
+        </dd>
+        <dt class="col-sm-2">
+            Location
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Vydra.Location.Name
+        </dd>
+        <dt class="col-sm-2">
+            Founder
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Vydra.founderID
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Vydra.TattooID">Edit</a> |
+    <a asp-page="./Index">Back to List of Vydras</a>
+</div>

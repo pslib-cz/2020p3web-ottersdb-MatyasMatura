@@ -1,0 +1,66 @@
+﻿@page
+@model _02Vydry.Pages.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Vydra DB</h1>
+
+<p>
+    <a asp-page="Create">Create New Vydra</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Color
+            </th>
+            <th>
+                Mother
+            </th>
+            <th>
+                Place
+            </th>
+            <th>
+                Location
+            </th>
+            <th>
+                Founder
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Vydra) {
+        <tr>
+            <td>
+                @item.Name
+            </td>
+            <td>
+                @item.Color
+            </td>
+            <td>
+                @(item.Mother?.Name ?? "neznámá")
+            </td>
+            <td>
+                @item.Place.Name
+            </td>
+            <td>
+                @item.Location.Name
+            </td>
+            <td>
+                @item.founderID
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.TattooID">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.TattooID">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.TattooID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
