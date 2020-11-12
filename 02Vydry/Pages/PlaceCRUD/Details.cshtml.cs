@@ -20,15 +20,15 @@ namespace _02Vydry.Pages.PlaceCRUD
 
         public Place Place { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(string id)
+        public async Task<IActionResult> OnGetAsync(string id, int? Lid)
         {
-            if (id == null)
+            if (id == null || Lid == null)
             {
                 return NotFound();
             }
 
             Place = await _context.Places
-                .Include(p => p.Location).AsNoTracking().FirstOrDefaultAsync(m => m.Name == id);
+                .Include(p => p.Location).AsNoTracking().FirstOrDefaultAsync(m => m.Name == id && m.LocationId == Lid);
 
             if (Place == null)
             {

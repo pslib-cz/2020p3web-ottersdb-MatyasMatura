@@ -22,16 +22,19 @@ namespace _02Vydry.Pages.PlaceCRUD
 
         [BindProperty]
         public Place Place { get; set; }
+        public IList<Vydra> Vydras { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(string id)
+
+        public async Task<IActionResult> OnGetAsync(string id, int? Lid)
         {
-            if (id == null)
+            if (id == null || Lid == null)
             {
                 return NotFound();
             }
 
             Place = await _context.Places
-                .Include(p => p.Location).AsNoTracking().FirstOrDefaultAsync(m => m.Name == id);
+                .Include(p => p.Location).AsNoTracking().FirstOrDefaultAsync(m => m.Name == id && m.LocationId == Lid);
+            
 
             if (Place == null)
             {
@@ -47,10 +50,26 @@ namespace _02Vydry.Pages.PlaceCRUD
                 return NotFound();
             }
 
-            Place = await _context.Places.FindAsync(id, Place.Location.LocationID);
+            Place =  _context.Places.Find(id, Place.Location.LocationID);
+
+            Vydras = _context.Vydras
+                .Include(v => v.Place).Include(v => v.Location).AsNoTracking().ToList<Vydra>();
 
             if (Place != null)
             {
+                foreach (var item in Vydras)
+                {
+                    if (item.Place.Name == id && item.Location.LocationID == Place.LocationId)
+                    {
+                        /*item.PlaceName = "Removed";
+                        item.LocationId = Place.LocationId;
+                        // _context.Vydras.Remove(item);
+                        _context.Places.Remove(Place);          
+                        await _context.SaveChangesAsync();*/
+                        return RedirectToPage("../DeleteError");
+                    }
+                }
+
                 _context.Places.Remove(Place);
                 await _context.SaveChangesAsync();
             }

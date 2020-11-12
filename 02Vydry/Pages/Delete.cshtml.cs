@@ -23,6 +23,7 @@ namespace _02Vydry.Pages
 
         [BindProperty]
         public Vydra Vydra { get; set; }
+        public IList<Vydra> Mothers { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -53,8 +54,17 @@ namespace _02Vydry.Pages
 
             Vydra = await _context.Vydras.FindAsync(id);
 
+            Mothers = _context.Vydras.Include(v => v.Mother).AsNoTracking().ToList<Vydra>();
+
             if (Vydra != null)
             {
+                foreach (var item in Mothers)
+                {
+                    if (item.Mother.TattooID == id)
+                    {
+                        return RedirectToPage("./DeleteError");
+                    }
+                }
                 _context.Vydras.Remove(Vydra);
                 await _context.SaveChangesAsync();
             }

@@ -22,7 +22,7 @@ namespace _02Vydry.Pages.LocationCRUD
 
         public IEnumerable<Location> Location { get;set; }
 
-        public void OnGetAsync()
+        public void OnGet()
         {
             Location =  _context.Locations.AsNoTracking().AsEnumerable();
         }

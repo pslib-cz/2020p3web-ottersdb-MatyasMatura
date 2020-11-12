@@ -53,7 +53,7 @@
                 @item.Location.Name
             </td>
             <td>
-                @item.founderID
+                @(item.founder?.Email ?? "neznámý")
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.TattooID">Edit</a> |

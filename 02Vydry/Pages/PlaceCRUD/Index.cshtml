@@ -32,9 +32,9 @@
                 @item.Location.Name
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.Name">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Name">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Name">Delete</a>
+                <a asp-page="./Edit" asp-route-id="@item.Name" asp-route-Lid="@item.LocationId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Name" asp-route-Lid="@item.LocationId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Name" asp-route-Lid="@item.LocationId">Delete</a>
             </td>
         </tr>
 }

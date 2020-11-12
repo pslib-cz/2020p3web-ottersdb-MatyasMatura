@@ -20,7 +20,7 @@ namespace _02Vydry.Pages.PlaceCRUD
 
         public IEnumerable<Place> Place { get;set; }
 
-        public void OnGetAsync()
+        public void OnGet()
         {
             Place = _context.Places
                 .Include(p => p.Location).AsNoTracking().AsEnumerable();
