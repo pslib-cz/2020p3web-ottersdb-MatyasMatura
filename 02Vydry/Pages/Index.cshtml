@@ -44,7 +44,7 @@
                 @item.Color
             </td>
             <td>
-                @(item.Mother?.Name ?? "neznámá")
+                @(item.Mother?.Name ?? "Unknown")
             </td>
             <td>
                 @item.Place.Name
@@ -53,7 +53,7 @@
                 @item.Location.Name
             </td>
             <td>
-                @(item.founder?.Email ?? "neznámý")
+                @(item.founder?.Email ?? "Unknown")
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.TattooID">Edit</a> |

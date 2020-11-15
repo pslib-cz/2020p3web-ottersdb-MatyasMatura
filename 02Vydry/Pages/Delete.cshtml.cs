@@ -20,6 +20,10 @@ namespace _02Vydry.Pages
         {
             _context = context;
         }
+        public string GetUserId()
+        {
+            return HttpContext.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? default;
+        }
 
         [BindProperty]
         public Vydra Vydra { get; set; }
@@ -42,7 +46,12 @@ namespace _02Vydry.Pages
             {
                 return NotFound();
             }
-            return Page();
+
+            if (Vydra.founderID != GetUserId())
+            {
+                return RedirectToPage("./NotFounder");
+            }
+            else return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(int? id)
