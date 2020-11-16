@@ -23,8 +23,7 @@ namespace _02Vydry.Models
         public Place Place { get; set; }
 
         public string PlaceName { get; set; }
-        public Location Location { get; set; }
-        [ForeignKey("Location")]
+
         public int LocationId { get; set; }
 
         public ICollection<Vydra> Children { get; set; }

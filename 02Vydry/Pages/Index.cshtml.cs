@@ -25,9 +25,8 @@ namespace _02Vydry.Pages
         public void OnGet()
         {
             Vydra = _context.Vydras
-                .Include(v => v.Location)
                 .Include(v => v.Mother)
-                .Include(v => v.Place)
+                .Include(v => v.Place).ThenInclude(p => p.Location)
                 .Include(v => v.founder).AsNoTracking().AsEnumerable();
         }
     }

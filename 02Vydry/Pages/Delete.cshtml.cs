@@ -37,9 +37,8 @@ namespace _02Vydry.Pages
             }
 
             Vydra = await _context.Vydras
-                .Include(v => v.Location)
                 .Include(v => v.Mother)
-                .Include(v => v.Place)
+                .Include(v => v.Place).ThenInclude(l => l.Location)
                 .Include(v => v.founder).AsNoTracking().FirstOrDefaultAsync(m => m.TattooID == id);
 
             if (Vydra == null)

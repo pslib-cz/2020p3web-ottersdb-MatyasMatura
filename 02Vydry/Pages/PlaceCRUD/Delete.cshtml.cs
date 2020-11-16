@@ -53,13 +53,14 @@ namespace _02Vydry.Pages.PlaceCRUD
             Place =  _context.Places.Find(id, Place.Location.LocationID);
 
             Vydras = _context.Vydras
-                .Include(v => v.Place).Include(v => v.Location).AsNoTracking().ToList<Vydra>();
+                .Include(v => v.Place).AsNoTracking().ToList<Vydra>();
 
             if (Place != null)
             {
                 foreach (var item in Vydras)
                 {
-                    if (item.Place.Name == id && item.Location.LocationID == Place.LocationId)
+                    //zkontrolovat tuto podmínku - co dělá item.LocationId == Place.LocationId ???
+                    if (item.Place.Name == id && item.LocationId == Place.LocationId)
                     {
                         /*item.PlaceName = "Removed";
                         item.LocationId = Place.LocationId;
