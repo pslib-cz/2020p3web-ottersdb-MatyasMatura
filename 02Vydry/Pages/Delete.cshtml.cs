@@ -70,7 +70,13 @@ namespace _02Vydry.Pages
                 }
                 else
                 {
-                    return RedirectToPage("./DeleteError");
+                    foreach (var item in Vydra.Children)
+                    {
+                        item.Mother = null;
+                    }
+                    _context.Vydras.Remove(Vydra);
+                    await _context.SaveChangesAsync();
+                    //return RedirectToPage("./DeleteError");
                 }
             }
 

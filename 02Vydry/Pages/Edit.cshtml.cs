@@ -57,6 +57,7 @@ namespace _02Vydry.Pages
             {
                 MotherId.Add(new SelectListItem($"{item.Name}", $"{item.TattooID}"));
             }
+            MotherId.Add(new SelectListItem("Unknown", $"{null}"));
 
             PlaceName = new List<SelectListItem>();
             foreach (var item in _context.Places.Include(l => l.Location).AsEnumerable<Place>())

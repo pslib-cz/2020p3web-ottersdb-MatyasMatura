@@ -58,10 +58,7 @@
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.TattooID">Edit</a> |
                 <a asp-page="./Details" asp-route-id="@item.TattooID">Details</a> |
-                @if (item.Children.Count == 0)
-                {
-                    <a asp-page="./Delete" asp-route-id="@item.TattooID">Delete</a>
-                }
+                <a asp-page="./Delete" asp-route-id="@item.TattooID">Delete</a>
             </td>
         </tr>
 }
