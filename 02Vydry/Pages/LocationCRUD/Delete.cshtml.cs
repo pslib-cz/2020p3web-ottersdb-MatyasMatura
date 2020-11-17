@@ -23,7 +23,6 @@ namespace _02Vydry.Pages.LocationCRUD
 
         [BindProperty]
         public Location Location { get; set; }
-        public IList<Place> Places { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -48,21 +47,19 @@ namespace _02Vydry.Pages.LocationCRUD
                 return NotFound();
             }
 
-            Location = await _context.Locations.FindAsync(id);
-
-            Places = _context.Places.Include(p => p.Location).AsNoTracking().ToList<Place>();
+            Location = await _context.Locations.Include(l => l.Places).AsNoTracking().FirstOrDefaultAsync(m => m.LocationID == id);
 
             if (Location != null)
             {
-                foreach (var item in Places)
+                if (Location.Places.Count == 0)
                 {
-                    if (item.Location.LocationID == id)
-                    {
-                        return RedirectToPage("../DeleteError");
-                    }
+                    _context.Locations.Remove(Location);
+                    await _context.SaveChangesAsync();
                 }
-                _context.Locations.Remove(Location);
-                await _context.SaveChangesAsync();
+                else
+                {
+                    return RedirectToPage("../DeleteError");
+                }
             }
 
             return RedirectToPage("./Index");

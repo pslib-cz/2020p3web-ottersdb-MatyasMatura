@@ -34,7 +34,10 @@
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Name" asp-route-Lid="@item.LocationId">Edit</a> |
                 <a asp-page="./Details" asp-route-id="@item.Name" asp-route-Lid="@item.LocationId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Name" asp-route-Lid="@item.LocationId">Delete</a>
+                @if (item.Vydry.Count == 0)
+                {
+                    <a asp-page="./Delete" asp-route-id="@item.Name" asp-route-Lid="@item.LocationId">Delete</a>
+                }
             </td>
         </tr>
 }

@@ -22,8 +22,6 @@ namespace _02Vydry.Pages.PlaceCRUD
 
         [BindProperty]
         public Place Place { get; set; }
-        public IList<Vydra> Vydras { get; set; }
-
 
         public async Task<IActionResult> OnGetAsync(string id, int? Lid)
         {
@@ -32,8 +30,7 @@ namespace _02Vydry.Pages.PlaceCRUD
                 return NotFound();
             }
 
-            Place = await _context.Places
-                .Include(p => p.Location).AsNoTracking().FirstOrDefaultAsync(m => m.Name == id && m.LocationId == Lid);
+            Place = await _context.Places.Include(p => p.Vydry).Include(p => p.Location).AsNoTracking().FirstOrDefaultAsync(m => m.Name == id && m.LocationId == Lid);
             
 
             if (Place == null)
@@ -43,36 +40,39 @@ namespace _02Vydry.Pages.PlaceCRUD
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(string id)
+        public async Task<IActionResult> OnPostAsync(string id, int? Lid)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            Place =  _context.Places.Find(id, Place.Location.LocationID);
-
-            Vydras = _context.Vydras
-                .Include(v => v.Place).AsNoTracking().ToList<Vydra>();
+            Place = await _context.Places.Include(p => p.Vydry).AsNoTracking().FirstOrDefaultAsync(m => m.Name == id && m.LocationId == Lid);
 
             if (Place != null)
             {
-                foreach (var item in Vydras)
+                if (Place.Vydry.Count == 0)
                 {
-                    //zkontrolovat tuto podmínku - co dělá item.LocationId == Place.LocationId ???
-                    if (item.Place.Name == id && item.LocationId == Place.LocationId)
+                    _context.Places.Remove(Place);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    return RedirectToPage("../DeleteError");
+                }
+                /*foreach (var item in Place.Vydry)
+                {
+                    if (item.PlaceName == id && item.LocationID == Place.LocationId)
                     {
-                        /*item.PlaceName = "Removed";
+                        item.PlaceName = "Removed";
                         item.LocationId = Place.LocationId;
-                        // _context.Vydras.Remove(item);
+                        _context.Vydras.Remove(item);
                         _context.Places.Remove(Place);          
-                        await _context.SaveChangesAsync();*/
+                        await _context.SaveChangesAsync();
                         return RedirectToPage("../DeleteError");
                     }
-                }
+                }*/
 
-                _context.Places.Remove(Place);
-                await _context.SaveChangesAsync();
             }
 
             return RedirectToPage("./Index");

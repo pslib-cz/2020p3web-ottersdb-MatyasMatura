@@ -23,7 +23,7 @@ namespace _02Vydry.Pages.PlaceCRUD
         public void OnGet()
         {
             Place = _context.Places
-                .Include(p => p.Location).AsNoTracking().AsEnumerable();
+                .Include(p => p.Location).Include(p => p.Vydry).AsNoTracking().AsEnumerable();
         }
     }
 }

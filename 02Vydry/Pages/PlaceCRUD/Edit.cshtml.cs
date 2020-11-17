@@ -21,13 +21,11 @@ namespace _02Vydry.Pages.PlaceCRUD
         {
             _context = context;
         }
-        
 
         [BindProperty]
         public PlaceInputModel PlaceData { get; set; }
         public Place Place { get; set; }
-        public List<SelectListItem> LocationName { get; set; }
-        
+
         public class PlaceInputModel
         {
             [Required]
@@ -66,27 +64,26 @@ namespace _02Vydry.Pages.PlaceCRUD
 
             return Page();
         }
-
+        public List<SelectListItem> LocationName { get; set; }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            /*if (!ModelState.IsValid)
             {
                 return Page();
-            }
+            }*/
 
             //old place object
-            Place placeold = await _context.Places.Include(p => p.Vydry).SingleOrDefaultAsync<Place>(p => p.Name == PlaceData.OriginalName && p.LocationId == PlaceData.OriginalLocationId);
+            Place placeold = await _context.Places
+                .Include(p => p.Vydry).SingleOrDefaultAsync<Place>(p => p.Name == PlaceData.OriginalName && p.LocationId == PlaceData.OriginalLocationId);
 
             //new place object
-
             Place placenew = new Place() { LocationId = PlaceData.LocationId, Name = PlaceData.Name };
 
             //insert new over old
             _context.Places.Add(placenew);
-
             foreach (var item in placeold.Vydry)
             {
                 item.PlaceName = placenew.Name;
@@ -97,9 +94,7 @@ namespace _02Vydry.Pages.PlaceCRUD
             _context.Places.Remove(placeold);
 
             //_context.Attach(Place).State = EntityState.Modified;
-
             await _context.SaveChangesAsync();
-
             return RedirectToPage("./Index");
         }
 

@@ -24,7 +24,7 @@ namespace _02Vydry.Pages.LocationCRUD
 
         public void OnGet()
         {
-            Location =  _context.Locations.AsNoTracking().AsEnumerable();
+            Location =  _context.Locations.Include(l => l.Places).AsNoTracking().AsEnumerable();
         }
     }
 }

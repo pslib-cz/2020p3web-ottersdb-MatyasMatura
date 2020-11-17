@@ -27,6 +27,7 @@ namespace _02Vydry.Pages
             Vydra = _context.Vydras
                 .Include(v => v.Mother)
                 .Include(v => v.Place).ThenInclude(p => p.Location)
+                .Include(v => v.Children)
                 .Include(v => v.founder).AsNoTracking().AsEnumerable();
         }
     }
