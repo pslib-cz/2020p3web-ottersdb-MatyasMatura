@@ -6,17 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20201019152842_Initial.cs" />
-    <Compile Remove="Migrations\20201019152842_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20201019153007_Initial.cs" />
-    <Compile Remove="Migrations\20201019153007_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20201020172821_Second.cs" />
-    <Compile Remove="Migrations\20201020172821_Second.Designer.cs" />
-    <Compile Remove="Migrations\20201028184725_03.cs" />
-    <Compile Remove="Migrations\20201028184725_03.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="MailKit" Version="2.9.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.8" />

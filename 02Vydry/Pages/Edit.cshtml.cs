@@ -32,6 +32,9 @@ namespace _02Vydry.Pages
 
         [BindProperty]
         public Vydra Vydra { get; set; }
+        [BindProperty]
+        public string newPlace { get; set; }
+
 
 
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -43,7 +46,7 @@ namespace _02Vydry.Pages
 
             Vydra = await _context.Vydras
                 .Include(v => v.Mother)
-                .Include(v => v.Place)
+                .Include(v => v.Place).ThenInclude(p => p.Location)
                 .Include(v => v.founder).AsNoTracking().FirstOrDefaultAsync(m => m.TattooID == id);
 
 
@@ -57,11 +60,19 @@ namespace _02Vydry.Pages
             {
                 MotherId.Add(new SelectListItem($"{item.Name}", $"{item.TattooID}"));
             }
-            MotherId.Add(new SelectListItem("Unknown", $"{null}"));
+            if (Vydra.MotherId == null)
+            {
+                MotherId.Add(new SelectListItem("Unknown", $"{null}", true));
+            }
+            else MotherId.Add(new SelectListItem("Unknown", $"{null}"));
 
             PlaceName = new List<SelectListItem>();
             foreach (var item in _context.Places.Include(l => l.Location).AsEnumerable<Place>())
             {
+                if(Vydra.LocationId == item.LocationId && Vydra.PlaceName == item.Name)
+                {
+                    PlaceName.Add(new SelectListItem($"{item.Name} ({item.Location.Name})", $"{item.LocationId};{item.Name}", true));
+                }
                 PlaceName.Add(new SelectListItem($"{item.Name} ({item.Location.Name})", $"{item.LocationId};{item.Name}"));
             }
 
@@ -82,7 +93,7 @@ namespace _02Vydry.Pages
 
             Vydra.founderID = GetUserId();
 
-            _vydraLogic.PlaceLocationSplit(Vydra);
+            _vydraLogic.PlaceLocationSplit(Vydra, newPlace);
 
             _context.Attach(Vydra).State = EntityState.Modified;
 

@@ -8,10 +8,10 @@ namespace _02Vydry.Service
 {
     public class VydraLogic
     {
-        public void PlaceLocationSplit(Vydra Vydra)
+        public void PlaceLocationSplit(Vydra Vydra, string newPlace)
         {
             string[] data;
-            data = Vydra.PlaceName.Split(";");
+            data = newPlace.Split(";");
             Vydra.LocationId = int.Parse(data[0]);
             Vydra.PlaceName = data[1];
         }

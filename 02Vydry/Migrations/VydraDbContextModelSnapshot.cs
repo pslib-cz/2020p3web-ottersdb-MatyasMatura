@@ -254,6 +254,18 @@ namespace _02Vydry.Migrations
                             LocationID = 666,
                             Area = 15432,
                             Name = "CHKO Čeký Les"
+                        },
+                        new
+                        {
+                            LocationID = 133,
+                            Area = 45663,
+                            Name = "Obrovské Hory"
+                        },
+                        new
+                        {
+                            LocationID = 134,
+                            Area = 2156,
+                            Name = "Kankaze"
                         });
                 });
 
@@ -306,6 +318,16 @@ namespace _02Vydry.Migrations
                         {
                             Name = "Český Pařez",
                             LocationId = 666
+                        },
+                        new
+                        {
+                            Name = "Na Vrcholu",
+                            LocationId = 133
+                        },
+                        new
+                        {
+                            Name = "U Chalupy",
+                            LocationId = 133
                         });
                 });
 
@@ -336,8 +358,6 @@ namespace _02Vydry.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("TattooID");
-
-                    b.HasIndex("LocationId");
 
                     b.HasIndex("MotherId");
 
@@ -373,6 +393,49 @@ namespace _02Vydry.Migrations
                             MotherId = 1,
                             Name = "ZBloudilka",
                             PlaceName = "Černé Jezero"
+                        },
+                        new
+                        {
+                            TattooID = 4,
+                            Color = "Nahnědlá",
+                            LocationId = 133,
+                            Name = "Frajerka",
+                            PlaceName = "U Chalupy"
+                        },
+                        new
+                        {
+                            TattooID = 5,
+                            Color = "Více nahnědlá",
+                            LocationId = 133,
+                            MotherId = 4,
+                            Name = "Alžběta",
+                            PlaceName = "U Chalupy"
+                        },
+                        new
+                        {
+                            TattooID = 6,
+                            Color = "Černá",
+                            LocationId = 133,
+                            Name = "Fialka",
+                            PlaceName = "U Chalupy"
+                        },
+                        new
+                        {
+                            TattooID = 7,
+                            Color = "Černá",
+                            LocationId = 133,
+                            MotherId = 6,
+                            Name = "Palka",
+                            PlaceName = "U Chalupy"
+                        },
+                        new
+                        {
+                            TattooID = 8,
+                            Color = "Černá",
+                            LocationId = 133,
+                            MotherId = 6,
+                            Name = "Malka",
+                            PlaceName = "U Chalupy"
                         });
                 });
 
@@ -438,12 +501,6 @@ namespace _02Vydry.Migrations
 
             modelBuilder.Entity("_02Vydry.Models.Vydra", b =>
                 {
-                    b.HasOne("_02Vydry.Models.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("_02Vydry.Models.Vydra", "Mother")
                         .WithMany("Children")
                         .HasForeignKey("MotherId")

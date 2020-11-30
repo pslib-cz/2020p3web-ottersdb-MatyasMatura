@@ -55,6 +55,8 @@ namespace _02Vydry.Pages
 
         [BindProperty]
         public Vydra Vydra { get; set; }
+        [BindProperty]
+        public string newPlace { get; set; }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://aka.ms/RazorPagesCRUD.
@@ -67,7 +69,7 @@ namespace _02Vydry.Pages
 
             Vydra.founderID = GetUserId();
 
-            _vydraLogic.PlaceLocationSplit(Vydra);
+            _vydraLogic.PlaceLocationSplit(Vydra, newPlace);
 
             _context.Vydras.Add(Vydra);
             await _context.SaveChangesAsync();

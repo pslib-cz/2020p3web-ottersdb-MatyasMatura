@@ -24,7 +24,9 @@ namespace _02Vydry.Models
             modelBuilder.Entity<Location>().HasData(
                 new Location { LocationID = 111, Name = "NP Šumava", Area = 33233 },
                 new Location { LocationID = 128, Name = "CHKO Jizerské hory", Area = 13165 },
-                new Location { LocationID = 666, Name = "CHKO Čeký Les", Area = 15432 }
+                new Location { LocationID = 666, Name = "CHKO Čeký Les", Area = 15432 },
+                new Location { LocationID = 133, Name = "Obrovské Hory", Area = 45663 },
+                new Location { LocationID = 134, Name = "Kankaze", Area = 2156 }
             );
 
             modelBuilder.Entity<Place>().HasKey(p => new { p.Name, p.LocationId });
@@ -36,7 +38,9 @@ namespace _02Vydry.Models
                     new Place { Name = "U Studánky", LocationId = 128 },
                     new Place { Name = "Na Čihadlech", LocationId = 128 },
                     new Place { Name = "U Studánky", LocationId = 666 },
-                    new Place { Name = "Český Pařez", LocationId = 666 }
+                    new Place { Name = "Český Pařez", LocationId = 666 },
+                    new Place { Name = "Na Vrcholu", LocationId = 133 },
+                    new Place { Name = "U Chalupy", LocationId = 133 }
                 );
 
             modelBuilder.Entity<Vydra>(
@@ -57,7 +61,12 @@ namespace _02Vydry.Models
             modelBuilder.Entity<Vydra>().HasData(
                 new Vydra { Name = "Velká Máti", TattooID = 1, Color = "hnědá jako hodně", PlaceName = "U Studánky", LocationId = 111 },
                 new Vydra { Name = "První Dcera", TattooID = 2, Color = "Hnědá taky", MotherId = 1, PlaceName = "U Studánky", LocationId = 111 },
-                new Vydra { Name = "ZBloudilka", TattooID = 3, Color = "Hnědá trochu", MotherId = 1, PlaceName = "Černé Jezero", LocationId = 128 }
+                new Vydra { Name = "ZBloudilka", TattooID = 3, Color = "Hnědá trochu", MotherId = 1, PlaceName = "Černé Jezero", LocationId = 128 },
+                new Vydra { Name = "Frajerka", TattooID = 4, Color = "Nahnědlá", PlaceName = "U Chalupy", LocationId = 133 },
+                new Vydra { Name = "Alžběta", TattooID = 5, Color = "Více nahnědlá", MotherId = 4, PlaceName = "U Chalupy", LocationId = 133 },
+                new Vydra { Name = "Fialka", TattooID = 6, Color = "Černá", PlaceName = "U Chalupy", LocationId = 133 },
+                new Vydra { Name = "Palka", TattooID = 7, Color = "Černá",MotherId = 6, PlaceName = "U Chalupy", LocationId = 133 },
+                new Vydra { Name = "Malka", TattooID = 8, Color = "Černá",MotherId = 6, PlaceName = "U Chalupy", LocationId = 133 }
             );
         }
     }

@@ -3,15 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace _02Vydry.Migrations
 {
-    public partial class Second : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "founderID",
-                table: "Vydras",
-                nullable: true);
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -49,6 +44,20 @@ namespace _02Vydry.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Locations",
+                columns: table => new
+                {
+                    LocationID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Area = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Locations", x => x.LocationID);
                 });
 
             migrationBuilder.CreateTable(
@@ -157,10 +166,113 @@ namespace _02Vydry.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Vydras_founderID",
+            migrationBuilder.CreateTable(
+                name: "Places",
+                columns: table => new
+                {
+                    Name = table.Column<string>(nullable: false),
+                    LocationId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Places", x => new { x.Name, x.LocationId });
+                    table.ForeignKey(
+                        name: "FK_Places_Locations_LocationId",
+                        column: x => x.LocationId,
+                        principalTable: "Locations",
+                        principalColumn: "LocationID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Vydras",
+                columns: table => new
+                {
+                    TattooID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    Color = table.Column<string>(nullable: true),
+                    MotherId = table.Column<int>(nullable: true),
+                    PlaceName = table.Column<string>(nullable: false),
+                    LocationId = table.Column<int>(nullable: false),
+                    founderID = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Vydras", x => x.TattooID);
+                    table.ForeignKey(
+                        name: "FK_Vydras_Vydras_MotherId",
+                        column: x => x.MotherId,
+                        principalTable: "Vydras",
+                        principalColumn: "TattooID");
+                    table.ForeignKey(
+                        name: "FK_Vydras_AspNetUsers_founderID",
+                        column: x => x.founderID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Vydras_Places_PlaceName_LocationId",
+                        columns: x => new { x.PlaceName, x.LocationId },
+                        principalTable: "Places",
+                        principalColumns: new[] { "Name", "LocationId" },
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Locations",
+                columns: new[] { "LocationID", "Area", "Name" },
+                values: new object[,]
+                {
+                    { 111, 33233, "NP Šumava" },
+                    { 128, 13165, "CHKO Jizerské hory" },
+                    { 666, 15432, "CHKO Čeký Les" },
+                    { 133, 45663, "Obrovské Hory" },
+                    { 134, 2156, "Kankaze" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Places",
+                columns: new[] { "Name", "LocationId" },
+                values: new object[,]
+                {
+                    { "U Studánky", 111 },
+                    { "U Buku", 111 },
+                    { "Černé Jezero", 128 },
+                    { "U Studánky", 128 },
+                    { "Na Čihadlech", 128 },
+                    { "U Studánky", 666 },
+                    { "Český Pařez", 666 },
+                    { "Na Vrcholu", 133 },
+                    { "U Chalupy", 133 }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Vydras",
-                column: "founderID");
+                columns: new[] { "TattooID", "Color", "LocationId", "MotherId", "Name", "PlaceName", "founderID" },
+                values: new object[] { 1, "hnědá jako hodně", 111, null, "Velká Máti", "U Studánky", null });
+
+            migrationBuilder.InsertData(
+                table: "Vydras",
+                columns: new[] { "TattooID", "Color", "LocationId", "MotherId", "Name", "PlaceName", "founderID" },
+                values: new object[] { 4, "Nahnědlá", 133, null, "Frajerka", "U Chalupy", null });
+
+            migrationBuilder.InsertData(
+                table: "Vydras",
+                columns: new[] { "TattooID", "Color", "LocationId", "MotherId", "Name", "PlaceName", "founderID" },
+                values: new object[] { 6, "Černá", 133, null, "Fialka", "U Chalupy", null });
+
+            migrationBuilder.InsertData(
+                table: "Vydras",
+                columns: new[] { "TattooID", "Color", "LocationId", "MotherId", "Name", "PlaceName", "founderID" },
+                values: new object[,]
+                {
+                    { 2, "Hnědá taky", 111, 1, "První Dcera", "U Studánky", null },
+                    { 3, "Hnědá trochu", 128, 1, "ZBloudilka", "Černé Jezero", null },
+                    { 5, "Více nahnědlá", 133, 4, "Alžběta", "U Chalupy", null },
+                    { 7, "Černá", 133, 6, "Palka", "U Chalupy", null },
+                    { 8, "Černá", 133, 6, "Malka", "U Chalupy", null }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -201,21 +313,29 @@ namespace _02Vydry.Migrations
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Vydras_AspNetUsers_founderID",
+            migrationBuilder.CreateIndex(
+                name: "IX_Places_LocationId",
+                table: "Places",
+                column: "LocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vydras_MotherId",
                 table: "Vydras",
-                column: "founderID",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                column: "MotherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vydras_founderID",
+                table: "Vydras",
+                column: "founderID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vydras_PlaceName_LocationId",
+                table: "Vydras",
+                columns: new[] { "PlaceName", "LocationId" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Vydras_AspNetUsers_founderID",
-                table: "Vydras");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -232,18 +352,19 @@ namespace _02Vydry.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Vydras");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Vydras_founderID",
-                table: "Vydras");
+            migrationBuilder.DropTable(
+                name: "Places");
 
-            migrationBuilder.DropColumn(
-                name: "founderID",
-                table: "Vydras");
+            migrationBuilder.DropTable(
+                name: "Locations");
         }
     }
 }
