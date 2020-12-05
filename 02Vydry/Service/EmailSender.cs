@@ -6,40 +6,53 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Identity.Client;
+using Microsoft.Graph.Auth;
+using Microsoft.Graph;
 
 namespace _02Vydry.Service
 {
     public class EmailSender : IEmailSender
     {
-        public string HtmlMessage { get; set; }
-        public IConfiguration Configuration { get; protected set; }
+        public IConfiguration _configuration { get; protected set; }
         public EmailSender(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
 
-        public Task SendEmailAsync(string email, string subject, string text)
+        public async Task SendEmailAsync(string email, string subject, string text)
         {
-            var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(Configuration["EmailSender:FromName"], Configuration["EmailSender:From"]));
-            message.To.Add(new MailboxAddress(email, email));
-            message.Subject = subject;
-
-            var bodyBuilder = new BodyBuilder();
-            if (HtmlMessage != "") bodyBuilder.HtmlBody = HtmlMessage; // pokud máme HTML zprávu, tak ji připojíme
-            bodyBuilder.TextBody = text;
-
-            message.Body = bodyBuilder.ToMessageBody();
-
-            Int32.TryParse(Configuration["EmailSender:Port"], out int port);
-            using var client = new SmtpClient();
-            client.ServerCertificateValidationCallback = (s, c, h, e) => true; // "vždyověření" certifikátu :)
-            client.Connect(Configuration["EmailSender:Server"], port, MailKit.Security.SecureSocketOptions.StartTlsWhenAvailable);
-            client.Authenticate(Configuration["EmailSender:Username"], Configuration["EmailSender:Password"]);
-            client.Send(message);
-            client.Disconnect(true);
-
-            return Task.FromResult(0);
+            /* vytvoření zprávy header + body */
+            var message = new Message
+            {
+                Subject = subject,
+                Body = new ItemBody
+                {
+                    ContentType = BodyType.Html,
+                    Content = text
+                },
+                ToRecipients = new List<Recipient>()
+                {
+                    new Recipient { EmailAddress = new EmailAddress { Address = email } }
+                }
+            };
+            /* vytvoření MS Graph API spojení */
+            string[] scopes = new string[] { "https://graph.microsoft.com/.default" };
+            IConfidentialClientApplication confidentialClientApplication = ConfidentialClientApplicationBuilder
+              .Create(_configuration["EmailSender:ClientId"])
+              .WithTenantId(_configuration["EmailSender:TenantId"])
+              .WithClientSecret(_configuration["EmailSender:ClientSecret"])
+              .Build();
+            await confidentialClientApplication.AcquireTokenForClient(scopes)
+              .ExecuteAsync()
+              .ConfigureAwait(false);
+            var authProvider = new ClientCredentialProvider(confidentialClientApplication);
+            var graphClient = new GraphServiceClient(authProvider);
+            /* odeslání zprávy prostřednictvím Grap API Mail.Send */
+            await graphClient.Users[_configuration["EmailSender:UserId"]]
+              .SendMail(message, false)
+              .Request()
+              .PostAsync();
         }
     }
 }
