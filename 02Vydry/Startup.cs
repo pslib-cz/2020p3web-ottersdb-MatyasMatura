@@ -40,12 +40,18 @@ namespace _02Vydry
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireDigit = false;
             }).AddEntityFrameworkStores<VydraDbContext>();
-            services.AddAuthentication().AddFacebook(facebookOptions =>
-            {
-                facebookOptions.AppId = Configuration["Facebook:AppId"];
-                facebookOptions.AppSecret = Configuration["Facebook:AppSecret"];
-                facebookOptions.AccessDeniedPath = "/FacebookFailed";
-            });
+            services.AddAuthentication()
+                .AddFacebook(facebookOptions =>
+                    {
+                        facebookOptions.AppId = Configuration["Facebook:AppId"];
+                        facebookOptions.AppSecret = Configuration["Facebook:AppSecret"];
+                        facebookOptions.AccessDeniedPath = "/FacebookFailed";
+                    })
+                .AddGoogle(googleOptions => 
+                    {
+                        googleOptions.ClientId = Configuration["Google:ClientId"];
+                        googleOptions.ClientSecret = Configuration["Google:ClientSecret"];
+                    });
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<VydraLogic>();
             services.AddTransient<IEmailSender, EmailSender>();
