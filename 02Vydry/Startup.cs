@@ -41,12 +41,12 @@ namespace _02Vydry
                 options.Password.RequireDigit = false;
             }).AddEntityFrameworkStores<VydraDbContext>();
             services.AddAuthentication()
-                .AddFacebook(facebookOptions =>
+                /*.AddFacebook(facebookOptions =>
                     {
                         facebookOptions.AppId = Configuration["Facebook:AppId"];
                         facebookOptions.AppSecret = Configuration["Facebook:AppSecret"];
                         facebookOptions.AccessDeniedPath = "/FacebookFailed";
-                    })
+                    })*/
                 .AddGoogle(googleOptions => 
                     {
                         googleOptions.ClientId = Configuration["Google:ClientId"];
